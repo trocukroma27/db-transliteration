@@ -9,7 +9,7 @@ async function toEnTranslit(from, to, env, uk) {
     const connection = await mysql.createConnection(db_config);
     
     let [data] = await connection.query(
-        `SELECT id, ${from_row} FROM ${from_table} WHERE id IN (SELECT id FROM ${to_table} WHERE ${to_row} IS NULL) LIMIT 1 `
+        `SELECT id, ${from_row} FROM ${from_table} WHERE id IN (SELECT id FROM ${to_table} WHERE ${to_row} IS NULL)`
     );
 
     if (data.length == 0) {
@@ -31,7 +31,7 @@ async function toEnTranslit(from, to, env, uk) {
 
     for (let i = 0; i < data.length; i++) {
         await connection.query(
-            `UPDATE ${to_table} SET ${to_row} = '${data[i][to_row]}' WHERE id = ${data[i]['id']}`
+            `UPDATE ${to_table} SET ${to_row} = "${data[i][to_row]}" WHERE id = ${data[i]['id']}`
         );
     }
 
